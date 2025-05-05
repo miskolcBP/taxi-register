@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Car Details</title>
+    <link rel="stylesheet" href="global-styles.css">
+    <link rel="stylesheet" href="taxi-info.css">
+</head>
+
+<body>
+    <div id="sidebar-container"></div>
+
+    <div id="main-content">
+        <div id="card-container">
+            <div class="car-card">
+                <div id="result" class="car-card-content">
+
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+<script src="taxi.js"></script>
+<script>
+    fetch(serverApiUrl + "/" + new URLSearchParams(window.location.search).get("id"), {
+        method: "GET"
+    })
+        .then(response => {
+            if (!response.ok) {
+                throw new Error('Server responded with an error');
+            }
+            return response.text();
+        })
+        .then(data => {
+
+            data = JSON.parse(data);
+
+            const card = document.querySelector("#result");
+            card.innerHTML = `
+        <p><strong>Id:</string> ${data.id}</p>
+        <p><strong>Brand:</strong> ${data.brand}</p>
+        <p><strong>Model:</strong> ${data.model}</p>
+        <p><strong>Fuel Use:</strong> ${data.fuelUse}</p>
+        <p><strong>Owner:</strong> ${data.owner}</p>
+        <p><strong>Day of Commission:</strong> ${data.dayOfCommission}</p>
+        `;
+            if (data.electric) {
+                card.innerHTML += `
+            <p><strong>Electric:</strong> Yes</p>
+            `;
+            } else {
+                card.innerHTML += `
+            <p><strong>Electric:</strong> No<p>
+            `;
+            }
+        }).catch(error => {
+            console.error('Fetch error:', error);
+            alert("Unexpected server error. Try again later");
+        });
+</script>
+
+</html>

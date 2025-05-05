@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Add Vehicle</title>
+    <link rel="stylesheet" href="global-styles.css">
+    <link rel="stylesheet" href="new-taxi.css">
+</head>
+
+<body>
+    <div id="sidebar-container"></div>
+
+    <div id="main-content">
+        <div id="form-container">
+            <h1>Add New Vehicle</h1>
+            <form id="add-vehicle-form">
+                <label for="id">ID</label>
+                <input type="text" id="id" name="id" required>
+                <label for="id" id="errId" class="errorMsg"></label>
+
+                <label for="brand">Brand</label>
+                <select id="brand" name="brand" aria-placeholder="Select a brand">
+                    <option value="" disabled selected hidden>Select a brand...</option>
+                    <option value="Toyota">Toyota</option>
+                    <option value="Honda">Honda</option>
+                    <option value="Ford">Ford</option>
+                    <option value="Chevrolet">Chevrolet</option>
+                    <option value="Nissan">Nissan</option>
+                    <option value="BMW">BMW</option>
+                    <option value="Mercedes-Benz">Mercedes-Benz</option>
+                    <option value="Volkswagen">Volkswagen</option>
+                    <option value="Audi">Audi</option>
+                    <option value="Hyundai">Hyundai</option>
+                    <option value="Kia">Kia</option>
+                    <option value="Subaru">Subaru</option>
+                    <option value="Lexus">Lexus</option>
+                    <option value="Mazda">Mazda</option>
+                    <option value="Tesla">Tesla</option>
+                    <option value="Jeep">Jeep</option>
+                    <option value="Porsche">Porsche</option>
+                    <option value="Volvo">Volvo</option>
+                    <option value="Jaguar">Jaguar</option>
+                    <option value="Land Rover">Land Rover</option>
+                    <option value="Mitsubishi">Mitsubishi</option>
+                    <option value="Ferrari">Ferrari</option>
+                    <option value="Lamborghini">Lamborghini</option>
+                </select>
+                <label id="errBrand" class="errorMsg"></label>
+
+                <label for="model">Model</label>
+                <input type="text" id="model" name="model" required>
+                <label id="errModel" class="errorMsg"></label>
+
+                <label for="fuelUse">Fuel Use</label>
+                <input type="text" id="fuelUse" name="fuelUse" required>
+                <label id="errFuelUse" class="errorMsg"></label>
+
+                <label for="owner">Owner</label>
+                <input type="text" id="owner" name="owner" required>
+                <label id="errOwner" class="errorMsg"></label>
+
+                <label for="dayOfCommission">Day of Commission</label>
+                <input type="date" id="dayOfCommission" name="dayOfCommission" required>
+                <label id="errDayOfComission" class="errorMsg"></label>
+
+                <label for="electric">Electric</label>
+                <select id="electric" name="electric" required>
+                    <option value="" disabled selected hidden>Select</option>
+                    <option value="Yes">Yes</option>
+                    <option value="No">No</option>
+                </select>
+                <label id="errElectric" class="errorMsg"></label>
+
+                <button type="button">Add Vehicle</button>
+            </form>
+        </div>
+    </div>
+
+</body>
+<script src="taxi.js"></script>
+<script>
+    const btnAdd = document.querySelector("button");
+    btnAdd.addEventListener('click', () => {
+        resetErrors();
+
+        carData = {
+            id: document.querySelector("#id").value,
+            brand: document.querySelector("#brand").value,
+            model: document.querySelector("#model").value,
+            fuelUse: document.querySelector("#fuelUse").value,
+            owner: document.querySelector("#owner").value,
+            dayOfCommission: document.querySelector("#dayOfCommission").value,
+            electric: document.querySelector("#electric").value
+        }
+
+        if (validateCarData(carData)) {
+            carData.electric = document.querySelector("#electric").value == "Yes" ? true : false
+            fetch(serverApiUrl, {
+                method: "POST",
+                body: JSON.stringify(carData)
+            })
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error('Server responded with an error');
+                    }
+                    window.location.href = "taxis.html";
+                }).catch(error => {
+                    console.error('Fetch error:', error);
+                    alert("Unexpected server error. Try again later");
+                });
+        }
+    })
+
+    function resetErrors() {
+        document.querySelectorAll(".errorMsg").forEach((label, index) => {
+            label.innerHTML = "";
+        })
+    }
+</script>
+
+</html>

@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Taxis</title>
+    <link rel="stylesheet" href="global-styles.css">
+    <link rel="stylesheet" href="taxis.css">
+</head>
+
+<body>
+    <div id="sidebar-container"></div>
+
+    <div id="main-content">
+        <div id="results">
+            <!-- Taxi cards will be inserted here dynamically -->
+        </div>
+    </div>
+
+    <script src="taxi.js"></script>
+    <script>
+        fetch(serverApiUrl, {
+            method: "GET"
+        })
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error('Server responded with an error');
+                }
+                return response.text();
+            })
+            .then(data => {
+                data = JSON.parse(data);
+                const taxisContainer = document.querySelector("#results");
+
+                data.forEach(taxi => {
+                    const card = document.createElement('div');
+                    card.classList.add('taxi-card');
+
+                    card.innerHTML = `
+                        <div class="taxi-card-content">
+                            <p><strong>Model:</strong> ${taxi.model}</p>
+                            <p><strong>Owner:</strong> ${taxi.owner}</p>
+                            <p><strong>Electric:</strong> ${taxi.electric ? "Yes" : "No"}</p>
+                            </div>
+                            <div class="taxi-card-buttons">
+                                <button class="delete-btn" data-taxi-id="${taxi.id}">×</button>
+                                <button class="edit-btn" data-taxi-id="${taxi.id}">✎</button>
+                            </div>
+                        </div>`;
+                    card.addEventListener('click', () => {
+                        window.location.href = `taxi-info.html?id=${taxi.id}`;
+                    })
+                    taxisContainer.appendChild(card);
+
+                    document.querySelectorAll(".delete-btn").forEach(btn => {
+                        btn.addEventListener('click', () => {
+                            event.stopPropagation()
+                            fetch(serverApiUrl + "/" + btn.dataset.taxiId, {
+                                method: "DELETE"
+                            })
+                                .then(response => {
+                                    if (response.ok) {
+                                        btn.parentElement.parentElement.remove();
+                                    } else {
+                                        throw new Error('Server responded with an error');
+                                    }
+                                }).catch(error => {
+                                    console.error('Fetch error:', error);
+                                    alert("Unexpected server error. Try again later");
+                                });
+                        })
+                    })
+
+                    document.querySelectorAll(".edit-btn").forEach(btn => {
+                        btn.addEventListener('click', () => {
+                            event.stopPropagation();
+                            window.location.href = `taxi-modify.html?id=${btn.dataset.taxiId}`;
+                        })
+                    })
+                });
+
+            }).catch(error => {
+                console.error('Fetch error:', error);
+                alert("Unexpected server error. Try again later");
+            });
+    </script>
+</body>
+
+</html>
