@@ -1,36 +1,31 @@
-/* Main content area */
 #main-content {
-    margin-left: 100px; /* Adjusted to make space for the sidebar */
+    margin-left: 100px;
+    margin-top: 200px;
     padding: 20px;
     width: 100%;
     display: flex;
     flex-direction: column;
 }
 
-/* Card container to center the card */
 #card-container {
     display: flex;
     justify-content: center;
-    align-items: center;
-    height: 100vh;
 }
 
-/* Square card styling */
 .car-card {
     background-color: #294963e5;
     border-radius: 10px;
     padding: 20px;
-    width: 700px; /* Square card with fixed width */
-    height: 450px; /* Square card with fixed height */
+    width: 700px;
+    height: 450px;
     box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.5);
-    border: 3px solid #4895d4; /* Yellow border */
+    border: 3px solid #4895d4;
     display: flex;
     flex-direction: column;
     justify-content: space-evenly;
     text-align: left;
 }
 
-/* Styling for the content inside the card */
 .car-card-content p {
     font-size: 22px;
     padding: 10px;

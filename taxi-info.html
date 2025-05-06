@@ -46,15 +46,7 @@
         <p><strong>Owner:</strong> ${data.owner}</p>
         <p><strong>Day of Commission:</strong> ${data.dayOfCommission}</p>
         `;
-            if (data.electric) {
-                card.innerHTML += `
-            <p><strong>Electric:</strong> Yes</p>
-            `;
-            } else {
-                card.innerHTML += `
-            <p><strong>Electric:</strong> No<p>
-            `;
-            }
+        card.innerHTML += data.electric ? "<p><strong>Electric:</strong> Yes</p>" : "<p><strong>Electric:</strong> No<p>";
         }).catch(error => {
             console.error('Fetch error:', error);
             alert("Unexpected server error. Try again later");
