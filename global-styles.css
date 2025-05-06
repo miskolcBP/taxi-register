@@ -13,7 +13,6 @@ body {
     display: flex;
     flex-direction: column;
     background-image: url('Resources/taxi2up\ \(Large\).jpg');
-    background-position: inherit;
     background-repeat: no-repeat;
     background-size: cover;
 }
